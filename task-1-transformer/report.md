@@ -464,10 +464,22 @@ python eval/run.py
 
 ## 11. 产物清单
 
+> **仓库里有什么**：`ckpt/best.pt`、`ckpt/best_baseline.pt` 和全部 `history*.json`（33 个，共 22 KB）。
+> 其余 `best_*.pt`（19 个，约 255 MB）体积太大，只保留在本地；它们都能用第 10 节的命令重新训练出来，
+> 曲线数据也都在对应的 `history_*.json` 里。
+
 ```
 ckpt/
 ├── best.pt              **最终模型**：jieba+RoPE+d192+no_ln（seed 1），dev 0.9083 / test 0.9025
 ├── best_baseline.pt     基线 H4L4，dev 0.8492（第 1 节、S1/S2 各表的参照）
+├── history.json         基线（seed 42）的逐 epoch 曲线
+├── history_no_{res,ln,both}.json        S2：4 层三组消融
+├── history_L12_*.json                   S2：12 层四组
+├── history_{H1L4,H4L2,H4L2_s0~s3,H4L4_s0~s3,H4L6,H8L4}.json   S1：head / 层数 / 种子复跑
+├── history_{char_rope,jieba_abs,jieba_rope,jieba_rope_e8,
+│           jieba_rope_d192_*,jieba_rope_noln_*}.json          S3/S4：分词器 / RoPE / 规模
+│
+│   （以下 19 个权重仅本地保留，可用第 10 节命令重训）
 ├── best_no_res.pt       S2：去掉残差，0.8558
 ├── best_no_ln.pt        S2：去掉 LayerNorm，0.8650
 ├── best_no_both.pt      S2：两者都去掉，0.8583
@@ -479,8 +491,7 @@ ckpt/
 ├── best_jieba_rope_e8.pt         同上 + 8 epoch，0.8842
 ├── best_jieba_rope_d192_e8.pt    + d192，0.8883
 ├── best_jieba_rope_d192_noln_s{42,0,1}.pt  最终配置，0.8967 / 0.9033 / 0.9083
-├── last*.pt             各组最后一轮
-├── history*.json        各组的逐 epoch 曲线数据
+└── last*.pt             各组最后一轮
 figures/                    （只保留报告里引用到的 8 张）
 ├── loss.png             基线（char + abs）的 loss / dev acc 曲线
 ├── acc_s2.png           第 5.1 节：4 层四条 dev acc 对比
